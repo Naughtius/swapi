@@ -20,7 +20,7 @@ export const useRoutes = () => {
          <Route path="/planets" exact>
             <PlanetsPage />
          </Route>
-         <Route path="/starships">
+         <Route path="/starships" exact>
             <StarshipsPage />
          </Route>
          <Route path="/peoples/:id">

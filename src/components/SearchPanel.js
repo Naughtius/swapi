@@ -10,8 +10,8 @@ const useStyles = makeStyles({
       flexWrap: "wrap",
       marginBottom: "30px",
    },
-   textField: {
-      width: "25ch",
+   helperText: {
+      color: "rgb(97, 26, 21)",
    },
 });
 
@@ -19,18 +19,24 @@ const SearchPanel = () => {
    const classes = useStyles();
    const [term, setTerm] = useState("");
    const [searchItems, setSearchItems] = useState([]);
+   const [error, setError] = useState(false);
 
    useEffect(() => {
       const swapiService = new SwapiService();
 
-      swapiService.getAllItems().then((response) => {
-         setSearchItems(response);
-      });
+      swapiService
+         .getAllItems()
+         .then((response) => {
+            setSearchItems(response);
+         })
+         .catch(() => {
+            setError(true);
+         });
    }, []);
 
    const search = (items, term) => {
       if (term.length === 0) {
-         return items;
+         return [];
       }
 
       return items.filter((item) => {
@@ -43,6 +49,7 @@ const SearchPanel = () => {
       setTerm(term);
    };
 
+   const errorMessage = error ? "ПОПРОБУЙТЕ ПОЗЖЕ" : null;
    const visibleItems = search(searchItems, term);
    return (
       <div className={classes.root}>
@@ -58,8 +65,13 @@ const SearchPanel = () => {
             variant="outlined"
             value={term}
             onChange={onSearchChange}
+            helperText={errorMessage}
+            className={classes.textField}
+            FormHelperTextProps={{
+               className: classes.helperText,
+            }}
          />
-         {term === "" ? null : <SearchList data={visibleItems} />}
+         <SearchList data={visibleItems} />
       </div>
    );
 };

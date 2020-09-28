@@ -2,23 +2,35 @@ import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import BreadcrumbsNav from "./BreadcrumbsNav";
 
-const useStyles = makeStyles({
+const useStyles = makeStyles((theme) => ({
    detailContainer: {
       display: "flex",
       justifyContent: "flex-start",
-      position: "relative",
+
+      [theme.breakpoints.down("sm")]: {
+         flexDirection: "column",
+      },
    },
    detailInfo: {
       marginLeft: "30px",
+      width: "50%",
+      [theme.breakpoints.down("sm")]: {
+         width: "100%",
+         marginLeft: "0px",
+      },
    },
    imgWrap: {
-      width: "400px",
+      width: "50%",
+      position: "relative",
+      [theme.breakpoints.down("sm")]: {
+         width: "100%",
+      },
    },
    errorImage: {
       top: 0,
       left: 0,
       right: 0,
-      width: "400px",
+      width: "50%",
       bottom: 0,
       zIndex: 1,
       position: "absolute",
@@ -26,14 +38,19 @@ const useStyles = makeStyles({
       backgroundSize: "242px",
       backgroundColor: "#fff",
       backgroundPosition: "center",
-      height: "100%",
+      height: "350px",
+      [theme.breakpoints.down("sm")]: {
+         width: "100%",
+         height: "100%",
+      },
    },
    img: {
       zIndex: 2,
       position: "relative",
       borderRadius: "10px",
+      width: "100%",
    },
-});
+}));
 
 const ItemDetail = ({ data, nameCategory, name, link }) => {
    const classes = useStyles();
@@ -58,10 +75,10 @@ const ItemDetail = ({ data, nameCategory, name, link }) => {
                   <div>
                      <p>Модель: {data.model}</p>
                      <p>Производитель: {data.manufacturer}</p>
-                     <p>Длина: {data.length}</p>
+                     <p>Длина: {data.length}m</p>
                      <p>Экипаж: {data.crew}</p>
                      <p>Пассажиры: {data.passengers}</p>
-                     <p>Грузоподъемность: {data.cargoCapicity}</p>
+                     <p>Грузоподъемность: {data.cargoCapicity} тонн</p>
                   </div>
                ) : null}
 

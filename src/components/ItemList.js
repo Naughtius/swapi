@@ -50,7 +50,14 @@ const ItemList = ({ data, name, link }) => {
 
    const renderItems = (arr) => {
       return arr.map((item) => (
-         <Grid item xs={3} key={item.id} className={classes.item}>
+         <Grid
+            item
+            xs={12}
+            sm={6}
+            md={3}
+            key={item.id}
+            className={classes.item}
+         >
             <Link to={`/${link}/${item.id}`} className={classes.link}>
                <Card>
                   <CardActionArea>

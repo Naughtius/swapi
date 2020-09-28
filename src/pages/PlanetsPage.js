@@ -9,20 +9,31 @@ const PlanetsPage = () => {
    const [planets, setPlanets] = useState(null);
    const [loading, setLoading] = useState(true);
    const [error, setError] = useState(false);
+   const [didMount, setDidMount] = useState(false);
 
    useEffect(() => {
       const swapiService = new SwapiService();
 
+      let unmounted = false;
+      setDidMount(true);
+
       swapiService
          .getAllPlanets()
          .then((response) => {
-            setPlanets(response);
-            setLoading(false);
+            if (!unmounted) {
+               setDidMount(false);
+               setPlanets(response);
+               setLoading(false);
+            }
          })
          .catch(() => {
             setError(true);
          });
-   }, []);
+
+      return () => {
+         unmounted = true;
+      };
+   }, [didMount]);
 
    if (error) {
       return <ErrorIndicator />;

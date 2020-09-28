@@ -3,9 +3,12 @@ import React from "react";
 import Header from "../components/Header";
 import SearchPanel from "../components/SearchPanel";
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles((theme) => ({
    main: {
       padding: "40px",
+      [theme.breakpoints.down("xs")]: {
+         padding: "20px",
+      },
    },
 }));
 

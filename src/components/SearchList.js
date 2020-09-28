@@ -28,7 +28,11 @@ const SearchList = ({ data }) => {
 
    const renderItems = (arr) => {
       return arr.map((item, index) => (
-         <Link to={`/${item.link}/${item.id}`} className={classes.link}>
+         <Link
+            to={`/${item.link}/${item.id}`}
+            className={classes.link}
+            key={index}
+         >
             <ListItem key={index} className={classes.listItem}>
                <ListItemText primary={item.name} />
             </ListItem>
