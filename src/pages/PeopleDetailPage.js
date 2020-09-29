@@ -10,31 +10,20 @@ const PeopleDetailPage = () => {
    const [people, setPeople] = useState(null);
    const [loading, setLoading] = useState(true);
    const [error, setError] = useState(false);
-   const [didMount, setDidMount] = useState(false);
 
    useEffect(() => {
       const swapiService = new SwapiService();
 
-      let unmounted = false;
-      setDidMount(true);
-
       swapiService
          .getPerson(linkId)
          .then((response) => {
-            if (!unmounted) {
-               setDidMount(false);
-               setPeople(response);
-               setLoading(false);
-            }
+            setPeople(response);
+            setLoading(false);
          })
          .catch(() => {
             setError(true);
          });
-
-      return () => {
-         unmounted = true;
-      };
-   }, [linkId, didMount]);
+   }, [linkId]);
 
    if (error) {
       return <ErrorIndicator />;

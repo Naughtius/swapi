@@ -9,31 +9,20 @@ const StarshipsPage = () => {
    const [starships, setStarships] = useState(null);
    const [loading, setLoading] = useState(true);
    const [error, setError] = useState(false);
-   const [didMount, setDidMount] = useState(false);
 
    useEffect(() => {
       const swapiService = new SwapiService();
 
-      let unmounted = false;
-      setDidMount(true);
-
       swapiService
          .getAllStarships()
          .then((response) => {
-            if (!unmounted) {
-               setDidMount(false);
-               setStarships(response);
-               setLoading(false);
-            }
+            setStarships(response);
+            setLoading(false);
          })
          .catch(() => {
             setError(true);
          });
-
-      return () => {
-         unmounted = true;
-      };
-   }, [didMount]);
+   }, []);
 
    if (error) {
       return <ErrorIndicator />;

@@ -17,6 +17,7 @@ const useStyles = makeStyles((theme) => ({
       [theme.breakpoints.down("sm")]: {
          width: "100%",
          marginLeft: "0px",
+         marginTop: "60px",
       },
    },
    imgWrap: {
@@ -41,7 +42,7 @@ const useStyles = makeStyles((theme) => ({
       height: "350px",
       [theme.breakpoints.down("sm")]: {
          width: "100%",
-         height: "100%",
+         height: "70px",
       },
    },
    img: {
