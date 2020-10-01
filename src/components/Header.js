@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import {
    AppBar,
    Toolbar,
@@ -11,6 +11,8 @@ import {
 import { NavLink } from "react-router-dom";
 import MenuIcon from "@material-ui/icons/Menu";
 import Drawer from "../hoc/Drawer";
+import { useDispatch, useSelector } from "react-redux";
+import { toggleMenuHandler } from "../store/actions/toggleMenu";
 
 const useStyles = makeStyles({
    root: {
@@ -28,11 +30,8 @@ const useStyles = makeStyles({
 const Header = () => {
    const classes = useStyles();
 
-   const [openMenu, SetOpenMenu] = useState(false);
-
-   const toggleMenuHandler = () => {
-      SetOpenMenu(!openMenu);
-   };
+   const dispatch = useDispatch();
+   const openMenu = useSelector((state) => state.app.openMenu);
 
    return (
       <div className={classes.root}>
@@ -56,10 +55,14 @@ const Header = () => {
                   </NavLink>
                </Hidden>
                <Hidden smUp>
-                  <MenuIcon onClick={toggleMenuHandler} />
+                  <MenuIcon
+                     onClick={() => dispatch(toggleMenuHandler(openMenu))}
+                  />
                   <Drawer
                      isOpen={openMenu}
-                     toggleMenuHandler={toggleMenuHandler}
+                     toggleMenuHandler={() =>
+                        dispatch(toggleMenuHandler(openMenu))
+                     }
                   />
                </Hidden>
             </Toolbar>

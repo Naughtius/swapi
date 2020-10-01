@@ -1,28 +1,23 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import ErrorIndicator from "../components/ErrorIndicator";
 import ItemList from "../components/ItemList";
 import Loader from "../components/Loader";
-import SwapiService from "../services/swapiService";
 import BreadcrumbsNav from "../components/BreadcrumbsNav";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchStarshipsList } from "../store/actions/starshipsList";
 
 const StarshipsPage = () => {
-   const [starships, setStarships] = useState(null);
-   const [loading, setLoading] = useState(true);
-   const [error, setError] = useState(false);
+   const dispatch = useDispatch();
+
+   const loading = useSelector((state) => state.app.loading);
+   const error = useSelector((state) => state.app.error);
+   const starships = useSelector(
+      (state) => state.starshipsList.fetchedStarshipsList
+   );
 
    useEffect(() => {
-      const swapiService = new SwapiService();
-
-      swapiService
-         .getAllStarships()
-         .then((response) => {
-            setStarships(response);
-            setLoading(false);
-         })
-         .catch(() => {
-            setError(true);
-         });
-   }, []);
+      dispatch(fetchStarshipsList());
+   }, [dispatch]);
 
    if (error) {
       return <ErrorIndicator />;

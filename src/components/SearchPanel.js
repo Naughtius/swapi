@@ -1,8 +1,13 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import TextField from "@material-ui/core/TextField";
 import SearchList from "../components/SearchList";
-import SwapiService from "../services/swapiService";
+import {
+   searchChangeHandler,
+   search,
+   fetchSearchItems,
+} from "../store/actions/search";
+import { useDispatch, useSelector } from "react-redux";
 
 const useStyles = makeStyles({
    root: {
@@ -17,40 +22,23 @@ const useStyles = makeStyles({
 
 const SearchPanel = () => {
    const classes = useStyles();
-   const [term, setTerm] = useState("");
-   const [searchItems, setSearchItems] = useState([]);
-   const [error, setError] = useState(false);
+   const dispatch = useDispatch();
+
+   const error = useSelector((state) => state.app.error);
+   const searchItems = useSelector((state) => state.search.fetchedSearchItems);
+   const term = useSelector((state) => state.search.term);
 
    useEffect(() => {
-      const swapiService = new SwapiService();
-
-      swapiService
-         .getAllItems()
-         .then((response) => {
-            setSearchItems(response);
-         })
-         .catch(() => {
-            setError(true);
-         });
-   }, []);
-
-   const search = (items, term) => {
-      if (term.length === 0) {
-         return [];
-      }
-
-      return items.filter((item) => {
-         return item.name.toLowerCase().indexOf(term.toLowerCase()) > -1;
-      });
-   };
+      dispatch(fetchSearchItems());
+   }, [dispatch]);
 
    const onSearchChange = (e) => {
       const term = e.target.value;
-      setTerm(term);
+      dispatch(searchChangeHandler(term));
    };
 
    const errorMessage = error ? "ПОПРОБУЙТЕ ПОЗЖЕ" : null;
-   const visibleItems = search(searchItems, term);
+   const visibleItems = dispatch(search(searchItems, term));
    return (
       <div className={classes.root}>
          <TextField

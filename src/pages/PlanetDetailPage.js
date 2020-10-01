@@ -1,29 +1,24 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { useParams } from "react-router-dom";
 import Loader from "../components/Loader";
-import SwapiService from "../services/swapiService";
 import ItemDetail from "../components/ItemDetail";
 import ErrorIndicator from "../components/ErrorIndicator";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchPlanetDetail } from "../store/actions/planetDetail";
 
 const PlanetDetailPage = () => {
    const linkId = useParams().id;
-   const [planet, setPLanet] = useState(null);
-   const [loading, setLoading] = useState(true);
-   const [error, setError] = useState(false);
+   const dispatch = useDispatch();
+
+   const loading = useSelector((state) => state.app.loading);
+   const error = useSelector((state) => state.app.error);
+   const planet = useSelector(
+      (state) => state.planetDetail.fetchedPlanetDetail
+   );
 
    useEffect(() => {
-      const swapiService = new SwapiService();
-
-      swapiService
-         .getPerson(linkId)
-         .then((response) => {
-            setPLanet(response);
-            setLoading(false);
-         })
-         .catch(() => {
-            setError(true);
-         });
-   }, [linkId]);
+      dispatch(fetchPlanetDetail(linkId));
+   }, [linkId, dispatch]);
 
    if (error) {
       return <ErrorIndicator />;

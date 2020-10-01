@@ -44,11 +44,12 @@ const Drawer = ({ isOpen, toggleMenuHandler }) => {
    const cls = [classes.Drawer];
 
    const renderItems = (arr) => {
-      return arr.map((item) => (
+      return arr.map((item, index) => (
          <Link
             to={item.link}
             className={classes.link}
             onClick={toggleMenuHandler}
+            key={index}
          >
             <li className={classes.listItem}>{item.label}</li>
          </Link>

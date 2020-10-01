@@ -1,28 +1,21 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import ErrorIndicator from "../components/ErrorIndicator";
 import Loader from "../components/Loader";
-import SwapiService from "../services/swapiService";
 import ItemList from "../components/ItemList";
 import BreadcrumbsNav from "../components/BreadcrumbsNav";
+import { useSelector, useDispatch } from "react-redux";
+import { fetchPeoplesList } from "../store/actions/peoplesList";
 
 const PeoplesPage = () => {
-   const [peoples, setPeoples] = useState(null);
-   const [loading, setLoading] = useState(true);
-   const [error, setError] = useState(false);
+   const dispatch = useDispatch();
+
+   const loading = useSelector((state) => state.app.loading);
+   const error = useSelector((state) => state.app.error);
+   const peoples = useSelector((state) => state.peoplesList.fetchedPeopleLists);
 
    useEffect(() => {
-      const swapiService = new SwapiService();
-
-      swapiService
-         .getAllPerson()
-         .then((response) => {
-            setPeoples(response);
-            setLoading(false);
-         })
-         .catch(() => {
-            setError(true);
-         });
-   }, []);
+      dispatch(fetchPeoplesList());
+   }, [dispatch]);
 
    if (error) {
       return <ErrorIndicator />;

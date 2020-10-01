@@ -1,28 +1,23 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import ErrorIndicator from "../components/ErrorIndicator";
 import ItemList from "../components/ItemList";
 import Loader from "../components/Loader";
-import SwapiService from "../services/swapiService";
 import BreadcrumbsNav from "../components/BreadcrumbsNav";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchPlanetsList } from "../store/actions/planetsList";
 
 const PlanetsPage = () => {
-   const [planets, setPlanets] = useState(null);
-   const [loading, setLoading] = useState(true);
-   const [error, setError] = useState(false);
+   const dispatch = useDispatch();
+
+   const loading = useSelector((state) => state.app.loading);
+   const error = useSelector((state) => state.app.error);
+   const planets = useSelector(
+      (state) => state.planetsList.fetchedPlanetsLists
+   );
 
    useEffect(() => {
-      const swapiService = new SwapiService();
-
-      swapiService
-         .getAllPlanets()
-         .then((response) => {
-            setPlanets(response);
-            setLoading(false);
-         })
-         .catch(() => {
-            setError(true);
-         });
-   }, []);
+      dispatch(fetchPlanetsList());
+   }, [dispatch]);
 
    if (error) {
       return <ErrorIndicator />;

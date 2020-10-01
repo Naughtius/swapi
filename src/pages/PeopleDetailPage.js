@@ -1,29 +1,24 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { useParams } from "react-router-dom";
 import Loader from "../components/Loader";
-import SwapiService from "../services/swapiService";
 import ItemDetail from "../components/ItemDetail";
 import ErrorIndicator from "../components/ErrorIndicator";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchPeopleDetail } from "../store/actions/peopleDetail";
 
 const PeopleDetailPage = () => {
    const linkId = useParams().id;
-   const [people, setPeople] = useState(null);
-   const [loading, setLoading] = useState(true);
-   const [error, setError] = useState(false);
+   const dispatch = useDispatch();
+
+   const loading = useSelector((state) => state.app.loading);
+   const error = useSelector((state) => state.app.error);
+   const people = useSelector(
+      (state) => state.peopleDetail.fetchedPeopleDetail
+   );
 
    useEffect(() => {
-      const swapiService = new SwapiService();
-
-      swapiService
-         .getPerson(linkId)
-         .then((response) => {
-            setPeople(response);
-            setLoading(false);
-         })
-         .catch(() => {
-            setError(true);
-         });
-   }, [linkId]);
+      dispatch(fetchPeopleDetail(linkId));
+   }, [linkId, dispatch]);
 
    if (error) {
       return <ErrorIndicator />;
